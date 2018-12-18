@@ -56,7 +56,7 @@ namespace isds309_pracFinal
             gasReader.Close();
             gasFile.Close();
             //open log / append
-            FileStream logFile = new FileStream(logPath, FileMode.Append, FileAccess.ReadWrite);
+            FileStream logFile = new FileStream(logPath, FileMode.Append, FileAccess.Write);
             StreamWriter logWriter = new StreamWriter(logFile);
             while (!exit)
             {
@@ -162,9 +162,9 @@ namespace isds309_pracFinal
                     WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
 
                     //save to receipt
-                    string receiptPath = DateTime.Now.ToString("Mdyyyyhhmmss") + (in_card % 10000) + ".txt";
+                    string receiptPath = DateTime.Now.ToString("Mdyyyyhhmmss") + "_" + (in_card % 10000) + ".txt";
                     FileStream receiptFile = new FileStream(receiptPath, FileMode.Create, FileAccess.Write);
-                    StreamWriter receiptWriter = new StreamWriter(fReceipt);
+                    StreamWriter receiptWriter = new StreamWriter(receiptFile);
                     //copy paste above
                     receiptWriter.WriteLine("\tThank you for using ISDS Gas Station");
                     receiptWriter.WriteLine("");
