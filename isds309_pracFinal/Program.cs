@@ -94,9 +94,12 @@ namespace isds309_pracFinal
                 WriteLine("Please enter your Credit card Number (6 digits): ");
                 in_card_str = ReadLine();
             }
-            //TODO gallons
-            WriteLine("Please enter amount of gas you need (gallons): ");
-            in_gallons = double.Parse(ReadLine());
+            //gallons
+            while (in_gallons > 0)
+            {
+                WriteLine("Please enter amount of gas you need (gallons): ");
+                in_gallons = double.Parse(ReadLine());
+            }
             WriteLine("---------------------------");
             //----------------------------------------------
             // VALIDATE / CALC
