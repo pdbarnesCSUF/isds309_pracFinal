@@ -35,6 +35,7 @@ namespace isds309_pracFinal
             double total_price = 0;
             int check_digit = 0;
             bool error = false;
+            bool exit = false;
             //----------------------------------------------
             //   Read Prices from file
             //----------------------------------------------
@@ -53,6 +54,8 @@ namespace isds309_pracFinal
                 ++gas_itr;
                 file_line = gasReader.ReadLine();
             }
+            gasReader.Close();
+            gasFile.Close();
             //----------------------------------------------
             //   MENU-ish
             //----------------------------------------------
