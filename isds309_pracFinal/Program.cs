@@ -157,27 +157,28 @@ namespace isds309_pracFinal
                     // CALC / OUTPUT
                     //----------------------------------------------
                     //calc
+                    DateTime timeStamp = DateTime.Now; //consistent timestamp
                     total_price = in_gallons * gas[selectedGasIdx, 1];
-
+                    
                     //in reality... all of the datetime should be saved here, then reused to ensure same timestamp!!!!
                     //output
                     Write("\n\n");
                     WriteLine("\tThank you for using ISDS Gas Station");
                     WriteLine("");
-                    WriteLine("\t       Date: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
+                    WriteLine("\t       Date: " + timeStamp.ToString("M/d/yyyy hh:mm:ss"));
                     WriteLine("\tCard Number: {0,10}", "**" + (in_card % 10000));
                     WriteLine("\t     Octane: {0,10}", gas[selectedGasIdx,0]);
                     WriteLine("\t  Gas Price: {0,10}  {1} gallons", gas[selectedGasIdx, 1].ToString("$#.000"), in_gallons);
                     WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
 
                     //save to receipt
-                    string receiptPath = DateTime.Now.ToString("Mdyyyyhhmmss") + "_" + (in_card % 10000) + ".txt";
+                    string receiptPath = timeStamp.ToString("Mdyyyyhhmmss") + "_" + (in_card % 10000) + ".txt";
                     FileStream receiptFile = new FileStream(receiptPath, FileMode.Create, FileAccess.Write);
                     StreamWriter receiptWriter = new StreamWriter(receiptFile);
                     //copy paste above
                     receiptWriter.WriteLine("\tThank you for using ISDS Gas Station");
                     receiptWriter.WriteLine("");
-                    receiptWriter.WriteLine("\t       Date: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
+                    receiptWriter.WriteLine("\t       Date: " + timeStamp.ToString("M/d/yyyy hh:mm:ss"));
                     receiptWriter.WriteLine("\tCard Number: {0,10}", "**" + (in_card % 10000));
                     receiptWriter.WriteLine("\t     Octane: {0,10}", gas[selectedGasIdx, 0]);
                     receiptWriter.WriteLine("\t  Gas Price: {0,10}  {1} gallons", gas[selectedGasIdx, 1].ToString("$#.000"), in_gallons);
@@ -186,8 +187,12 @@ namespace isds309_pracFinal
                     receiptFile.Close();
 
                     //save to log
-                    //TODO
-                    logWriter.WriteLine("...all the info...");
+                    logWriter.WriteLine(    timeStamp.ToString("o") + ',' + 
+                                            (in_card % 10000) + ',' + 
+                                            gas[selectedGasIdx, 0] + ',' + 
+                                            in_gallons + ',' +
+                                            gas[selectedGasIdx, 1] + ',' +
+                                            total_price);
                 }
                 Write("\n\n");//end
             }//while (!exit)
