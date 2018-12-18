@@ -34,7 +34,6 @@ namespace isds309_pracFinal
 
             double total_price = 0;
             int check_digit = 0;
-            bool error = false;
             bool exit = false;
             //----------------------------------------------
             //   Read Prices from file
@@ -140,56 +139,23 @@ namespace isds309_pracFinal
                     }
                 }
                 WriteLine("---------------------------");
-                //----------------------------------------------
-                // VALIDATE / CALC
-                // TODO INCOMPLETE, 
-                //----------------------------------------------
-                
-                    switch (in_gas)
-                    {
-                        case 87://reg
-                            //total_price = in_gallons * PRICE_REG;
-                            break;
-                        case 89://plus
-                            //total_price = in_gallons * PRICE_PLU;
-                            break;
-                        case 91://premium
-                            //total_price = in_gallons * PRICE_PRE;
-                            break;
-                        default:
-                            WriteLine("Valid gas choices are 87,89,91");
-                            error = true;
-                            break;
-                    }
-
-                
-                if (!error)
+                if (!exit)
                 {
                     //----------------------------------------------
-                    // OUTPUT
+                    // CALC / OUTPUT
                     //----------------------------------------------
+                    //calc
+                    total_price = in_gallons * gas[selectedGasIdx, 1];
+                    //output
                     Write("\n\n");
                     WriteLine("\tThank you for using ISDS Gas Station");
                     WriteLine("");
-                    WriteLine("\tDate: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
+                    WriteLine("\t       Date: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
                     WriteLine("\tCard Number: {0,10}", "**" + (in_card % 10000));
-                    switch (in_gas)
-                    {
-                        case 87:
-                            //WriteLine("\tRegular (87) {0,10}     {1} gallons", PRICE_REG.ToString("$#.000"), in_gallons);
-                            break;
-                        case 89:
-                            //WriteLine("\tPlus (89)    {0,10}     {1} gallons", PRICE_PLU.ToString("$#.000"), in_gallons);
-                            break;
-                        case 91:
-                            //WriteLine("\tPremium (91) {0,10}     {1} gallons", PRICE_PRE.ToString("$#.000"), in_gallons);
-                            break;
-                        default:
-                            WriteLine("!!how did you get here? error should be caught above!!");
-                            break;
-                    }
+                    WriteLine("\t     Octane: {0,10}", gas[selectedGasIdx,0]);
+                    WriteLine("\t  Gas Price: {0,10}  {1} gallons", gas[selectedGasIdx, 1].ToString("$#.000"), in_gallons);
                     WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
-                }//error
+                }
                 Write("\n\n");//end
             }//while (!exit)
             //close files
