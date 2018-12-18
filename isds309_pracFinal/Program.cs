@@ -55,6 +55,9 @@ namespace isds309_pracFinal
             }
             gasReader.Close();
             gasFile.Close();
+            //open log / append
+            FileStream logFile = new FileStream(logPath, FileMode.Append, FileAccess.ReadWrite);
+            StreamWriter logWriter = new StreamWriter(logFile);
             while (!exit)
             {
                 //----------------------------------------------
@@ -146,6 +149,8 @@ namespace isds309_pracFinal
                     //----------------------------------------------
                     //calc
                     total_price = in_gallons * gas[selectedGasIdx, 1];
+
+                    //in reality... all of the datetime should be saved here, then reused to ensure same timestamp!!!!
                     //output
                     Write("\n\n");
                     WriteLine("\tThank you for using ISDS Gas Station");
@@ -155,11 +160,31 @@ namespace isds309_pracFinal
                     WriteLine("\t     Octane: {0,10}", gas[selectedGasIdx,0]);
                     WriteLine("\t  Gas Price: {0,10}  {1} gallons", gas[selectedGasIdx, 1].ToString("$#.000"), in_gallons);
                     WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
+
+                    //save to receipt
+                    string receiptPath = DateTime.Now.ToString("Mdyyyyhhmmss") + (in_card % 10000) + ".txt";
+                    FileStream receiptFile = new FileStream(receiptPath, FileMode.Create, FileAccess.Write);
+                    StreamWriter receiptWriter = new StreamWriter(fReceipt);
+                    //copy paste above
+                    receiptWriter.WriteLine("\tThank you for using ISDS Gas Station");
+                    receiptWriter.WriteLine("");
+                    receiptWriter.WriteLine("\t       Date: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
+                    receiptWriter.WriteLine("\tCard Number: {0,10}", "**" + (in_card % 10000));
+                    receiptWriter.WriteLine("\t     Octane: {0,10}", gas[selectedGasIdx, 0]);
+                    receiptWriter.WriteLine("\t  Gas Price: {0,10}  {1} gallons", gas[selectedGasIdx, 1].ToString("$#.000"), in_gallons);
+                    receiptWriter.WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
+                    receiptWriter.Close();
+                    receiptFile.Close();
+
+                    //save to log
+                    //TODO
+                    logWriter.WriteLine("...all the info...");
                 }
                 Write("\n\n");//end
             }//while (!exit)
-            //close files
-
+            //-----close log------
+            logWriter.Close();
+            logFile.Close();
         }//main
     }
 }
