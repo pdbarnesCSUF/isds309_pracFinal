@@ -26,14 +26,14 @@ namespace isds309_pracFinal
             const string logPath = "log.txt";
 
             string in_card_str = "";
-            int in_card = 0;
-            int in_gas = 0;
-            double in_gallons = 0;
+            int in_card = -1;
+            int in_gas = -1;
+            double in_gallons = -1;
 
             int selectedGasIdx = -1;
 
-            double total_price = 0;
-            int check_digit = 0;
+            double total_price = -1;
+            int check_digit = -1;
             bool exit = false;
             //----------------------------------------------
             //   Read Prices from file
@@ -60,6 +60,15 @@ namespace isds309_pracFinal
             StreamWriter logWriter = new StreamWriter(logFile);
             while (!exit)
             {
+                //-----------------------
+                //RESET INPUT
+                in_card_str = "";
+                in_card = -1;
+                in_gas = -1;
+                in_gallons = -1;
+                selectedGasIdx = -1;
+                total_price = -1;
+                check_digit = -1;
                 //----------------------------------------------
                 //   MENU-ish
                 //----------------------------------------------
@@ -131,7 +140,7 @@ namespace isds309_pracFinal
                     }
                 }
                 //gallons
-                while (in_gallons > 0 && !exit)
+                while (in_gallons <= 0 && !exit)
                 {
                     WriteLine("Please enter amount of gas you need (gallons): ");
                     in_gallons = double.Parse(ReadLine());
