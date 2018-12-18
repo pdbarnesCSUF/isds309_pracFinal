@@ -56,114 +56,144 @@ namespace isds309_pracFinal
             }
             gasReader.Close();
             gasFile.Close();
-            //----------------------------------------------
-            //   MENU-ish
-            //----------------------------------------------
-            WriteLine("Welcome to ISDS Gas Station");
-            WriteLine("---------------------------");
-            WriteLine("");
-            WriteLine("You have the following choices ...");
-            WriteLine("{0,10} {1,10}", "Octane", "Price");
-            for ( int i = 0; i < GAS_TYPES; ++i)
+            while (!exit)
             {
-                WriteLine("{0,10} {1,10}", gas[i,0], gas [i,1]);
-            }
-            WriteLine("");
-            WriteLine("---------------------------");
-            WriteLine("");
-            //----------------------------------------------
-            // GET INPUT
-            //----------------------------------------------
-            //octane
-            while (selectedGasIdx == -1)
-            {
-                WriteLine("Please enter your choice of gasoline (octane #): ");
-                in_gas = int.Parse(ReadLine());
-                //search
-                //selectedGasIdx = -1;
+                //----------------------------------------------
+                //   MENU-ish
+                //----------------------------------------------
+                WriteLine("Welcome to ISDS Gas Station");
+                WriteLine("---------------------------");
+                WriteLine("");
+                WriteLine("You have the following choices ...");
+                WriteLine("{0,10} {1,10}", "Octane", "Price");
                 for (int i = 0; i < GAS_TYPES; ++i)
                 {
-                    if (in_gas == gas[i,0])
+                    WriteLine("{0,10} {1,10}", gas[i, 0], gas[i, 1]);
+                }
+                WriteLine("");
+                WriteLine("---------------------------");
+                WriteLine("");
+                //----------------------------------------------
+                // GET INPUT
+                //----------------------------------------------
+                WriteLine("Enter 999 to exit anytime");
+                //octane
+                while (selectedGasIdx == -1 && !exit)
+                {
+                    WriteLine("Please enter your choice of gasoline (octane #): ");
+                    in_gas = int.Parse(ReadLine());
+
+                    if (in_gas == 999)
                     {
-                        selectedGasIdx = i;
+                        exit = true;
+                        break;
+                    }
+                    //search
+                    //selectedGasIdx = -1;
+                    for (int i = 0; i < GAS_TYPES; ++i)
+                    {
+                        if (in_gas == gas[i, 0])
+                        {
+                            selectedGasIdx = i;
+                        }
+                    }
+                    if (selectedGasIdx == -1)
+                        WriteLine("Invalid Octane");
+                }
+                //card length
+                while (in_card_str.Length != 6 && !exit)
+                {
+                    WriteLine("Please enter your Credit card Number (6 digits): ");
+                    in_card_str = ReadLine();
+                    if (in_card_str == "999")
+                    {
+                        exit = true;
+                        break;
+                    }
+                    else
+                    {
+                        in_card = int.Parse(in_card_str);
+                        //WriteLine("DBG:" + (in_card / 1000000)); //DEBUG
+                        //WriteLine("DBG:" + ((in_card / 10) % 5)); //DEBUG
+                        check_digit = in_card % 10;
+                        if ((in_card / 10) % 5 == check_digit)
+                        {
+                            //WriteLine("DBG: CARD VALID"); //DEBUG
+                            //CARD IS VALID
+                        }
+                        else
+                        {
+                            WriteLine("Your credit card number is incorrect");
+                            in_card_str = ""; //reset it... cheap hacky way to force loop w/o decl a new var
+                        }
                     }
                 }
-                if (selectedGasIdx == -1)
-                    WriteLine("Invalid Octane");
-            }
-            //card length
-            while (in_card_str.Length != 6)
-            {
-                WriteLine("Please enter your Credit card Number (6 digits): ");
-                in_card_str = ReadLine();
-            }
-            //gallons
-            while (in_gallons > 0)
-            {
-                WriteLine("Please enter amount of gas you need (gallons): ");
-                in_gallons = double.Parse(ReadLine());
-            }
-            WriteLine("---------------------------");
-            //----------------------------------------------
-            // VALIDATE / CALC
-            // TODO INCOMPLETE, 
-            //----------------------------------------------
-            in_card = int.Parse(in_card_str);
-            //WriteLine("DBG:" + (in_card / 1000000)); //DEBUG
-            //WriteLine("DBG:" + ((in_card / 10) % 5)); //DEBUG
-            check_digit = in_card % 10;
-            if ((in_card / 10) % 5 == check_digit)
-            {
-                switch (in_gas)
+                //gallons
+                while (in_gallons > 0 && !exit)
                 {
-                    case 87://reg
-//                            total_price = in_gallons * PRICE_REG;
+                    WriteLine("Please enter amount of gas you need (gallons): ");
+                    in_gallons = double.Parse(ReadLine());
+                    if (in_gallons == 999)
+                    {
+                        exit = true;
                         break;
-                    case 89://plus
-                        //total_price = in_gallons * PRICE_PLU;
-                        break;
-                    case 91://premium
-                        //total_price = in_gallons * PRICE_PRE;
-                        break;
-                    default:
-                        WriteLine("Valid gas choices are 87,89,91");
-                        error = true;
-                        break;
+                    }
                 }
-            }
-            else
-            {
-                WriteLine("Your credit card number is incorrect");
-                error = true;
-            }
-            if (!error)
-            {
+                WriteLine("---------------------------");
                 //----------------------------------------------
-                // OUTPUT
+                // VALIDATE / CALC
+                // TODO INCOMPLETE, 
                 //----------------------------------------------
-                Write("\n\n");
-                WriteLine("\tThank you for using ISDS Gas Station");
-                WriteLine("");
-                WriteLine("\tDate: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
-                WriteLine("\tCard Number: {0,10}", "**" + (in_card % 10000));
-                switch (in_gas)
+                
+                    switch (in_gas)
+                    {
+                        case 87://reg
+                            //total_price = in_gallons * PRICE_REG;
+                            break;
+                        case 89://plus
+                            //total_price = in_gallons * PRICE_PLU;
+                            break;
+                        case 91://premium
+                            //total_price = in_gallons * PRICE_PRE;
+                            break;
+                        default:
+                            WriteLine("Valid gas choices are 87,89,91");
+                            error = true;
+                            break;
+                    }
+
+                
+                if (!error)
                 {
-                    case 87:
-                        //WriteLine("\tRegular (87) {0,10}     {1} gallons", PRICE_REG.ToString("$#.000"), in_gallons);
-                        break;
-                    case 89:
-                        //WriteLine("\tPlus (89)    {0,10}     {1} gallons", PRICE_PLU.ToString("$#.000"), in_gallons);
-                        break;
-                    case 91:
-                        //WriteLine("\tPremium (91) {0,10}     {1} gallons", PRICE_PRE.ToString("$#.000"), in_gallons);
-                        break;
-                    default:
-                        WriteLine("!!how did you get here? error should be caught above!!");
-                        break;
-                }
-                WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
-            }//error
-            Write("\n\n");//end
+                    //----------------------------------------------
+                    // OUTPUT
+                    //----------------------------------------------
+                    Write("\n\n");
+                    WriteLine("\tThank you for using ISDS Gas Station");
+                    WriteLine("");
+                    WriteLine("\tDate: " + DateTime.Now.ToString("M/d/yyyy hh:mm:ss"));
+                    WriteLine("\tCard Number: {0,10}", "**" + (in_card % 10000));
+                    switch (in_gas)
+                    {
+                        case 87:
+                            //WriteLine("\tRegular (87) {0,10}     {1} gallons", PRICE_REG.ToString("$#.000"), in_gallons);
+                            break;
+                        case 89:
+                            //WriteLine("\tPlus (89)    {0,10}     {1} gallons", PRICE_PLU.ToString("$#.000"), in_gallons);
+                            break;
+                        case 91:
+                            //WriteLine("\tPremium (91) {0,10}     {1} gallons", PRICE_PRE.ToString("$#.000"), in_gallons);
+                            break;
+                        default:
+                            WriteLine("!!how did you get here? error should be caught above!!");
+                            break;
+                    }
+                    WriteLine("\tTotal Price: {0,10}", total_price.ToString("$#.000"));
+                }//error
+                Write("\n\n");//end
+            }//while (!exit)
+            //close files
+
         }//main
     }
 }
